@@ -2,7 +2,7 @@
   <tr>
     <td>{{ index }}</td>
     <td>
-      {{ task.taskName }}
+      {{ task.name }}
     </td>
     <td class="text-center">
       <span class="badge " v-bind:class="classLevel">{{ getLevelName }}</span>
@@ -15,40 +15,28 @@
 </template>
 
 <script>
+import mapLevel from "../mocks/level";
 export default {
   name: "todo-list-item",
   props: {
     task: { type: Object, default: null },
     index: Number,
   },
+  // created() {
+  //   console.log("todolist=", mapLevel);
+  // },
   computed: {
     getLevelName() {
-      switch (this.task.level) {
-        case 0:
-          return "Small";
-        case 1:
-          return "Medium";
-        case 2:
-          return "Hight";
-        default:
-          return "";
-      }
+      return this.mapLevel[this.task.level].name;
     },
     classLevel() {
-      switch (this.task.level) {
-        case 0:
-          return { "badge-info": true };
-        case 1:
-          return { "badge-warning": true };
-        case 2:
-          return { "badge-danger": true };
-        default:
-          return {};
-      }
+      return this.mapLevel[this.task.level].class;
     },
   },
   data() {
-    return {};
+    return {
+      mapLevel,
+    };
   },
 };
 </script>

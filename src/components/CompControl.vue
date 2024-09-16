@@ -5,7 +5,7 @@
         <control-sort />
       </b-col>
       <b-col>
-        <control-search />
+        <control-search @handleSearch="handleSearch" :strSearch="strSearch" />
       </b-col>
     </b-row>
   </div>
@@ -17,8 +17,16 @@ import ControlSort from "./ControlSort.vue";
 export default {
   components: { ControlSort, ControlSearch },
   name: "comp-control",
+  props: {
+    strSearch: { type: String, default: "" },
+  },
   data() {
     return {};
+  },
+  methods: {
+    handleSearch(data) {
+      this.$emit("handleSearch", data);
+    },
   },
 };
 </script>

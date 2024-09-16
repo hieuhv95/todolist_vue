@@ -2,8 +2,8 @@
   <div id="app">
     <b-container>
       <comp-title />
-      <comp-control />
-      <comp-form />
+      <comp-control :strSearch="strSearch" @handleSearch="handleSearch" />
+      <comp-form v-bind:isShowForm="isShowForm" v-on:toggleForm="toggleForm" />
 
       <todo-list-table v-bind:listTask="listTask" />
     </b-container>
@@ -22,10 +22,30 @@ export default {
   data() {
     return {
       listTask: listTask,
+      isShowForm: false,
+      strSearch: "",
     };
   },
-  created() {
-    console.log("created tas =", this.listTask);
+  computed: {
+    listTaskSearch() {
+      const { strSearch } = this;
+      var newItems = [];
+      this.listTask.forEach((item, index) => {
+        if (item.name.includes(strSearch) === true) {
+          newItems.push(item);
+        }
+      });
+      console.log("Filtered newItems =", newItems);
+      return newItems;
+    },
+  },
+  methods: {
+    handleSearch(data) {
+      this.strSearch = data;
+    },
+    toggleForm() {
+      this.isShowForm = !this.isShowForm;
+    },
   },
 };
 </script>
