@@ -5,7 +5,7 @@
       <comp-control :strSearch="strSearch" @handleSearch="handleSearch" />
       <comp-form v-bind:isShowForm="isShowForm" v-on:toggleForm="toggleForm" />
 
-      <todo-list-table v-bind:listTask="listTask" />
+      <todo-list-table v-bind:listTask="listTaskSearch" />
     </b-container>
   </div>
 </template>
@@ -29,12 +29,10 @@ export default {
   computed: {
     listTaskSearch() {
       const { strSearch } = this;
-      var newItems = [];
-      this.listTask.forEach((item, index) => {
-        if (item.name.includes(strSearch) === true) {
-          newItems.push(item);
-        }
+      var newItems = this.listTask.filter((item) => {
+        return item.name.toLowerCase().includes(strSearch.toLowerCase());
       });
+
       console.log("Filtered newItems =", newItems);
       return newItems;
     },
