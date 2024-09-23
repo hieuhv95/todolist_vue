@@ -16,6 +16,7 @@
             v-bind:key="task.id"
             v-bind:task="task"
             v-bind:index="index + 1"
+            @handleDelete="handleDeleteTask"
           />
         </tbody>
         <tbody v-else>
@@ -37,6 +38,12 @@ export default {
   },
   data() {
     return {};
+  },
+  methods: {
+    handleDeleteTask(data) {
+      console.log("delete", data);
+      this.$emit("handleDeleteTask", data);
+    },
   },
 };
 </script>

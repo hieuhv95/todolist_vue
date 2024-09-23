@@ -5,11 +5,13 @@
       {{ task.name }}
     </td>
     <td class="text-center">
-      <span class="badge " v-bind:class="classLevel">{{ getLevelName }}</span>
+      <span class="badge " :class="classLevel">{{ getLevelName }}</span>
     </td>
     <td>
       <button class="btn btn-warning btn-sm">Edit</button>
-      <button class="btn btn-danger btn-sm">Delete</button>
+      <button @click="handleDelete" class="btn btn-danger btn-sm">
+        Delete
+      </button>
     </td>
   </tr>
 </template>
@@ -19,18 +21,32 @@ import mapLevel from "../mocks/level";
 export default {
   name: "todo-list-item",
   props: {
-    task: { type: Object, default: null },
-    index: Number,
+    task: {
+      type: Object,
+      required: true,
+    },
+    index: {
+      type: Number,
+      required: true,
+    },
   },
-  // created() {
-  //   console.log("todolist=", mapLevel);
-  // },
+  created() {
+    console.log("todolist=", mapLevel);
+  },
   computed: {
     getLevelName() {
-      return this.mapLevel[this.task.level].name;
+      const level = this.mapLevel[this.task.level];
+      return level ? level.name : "Unknown"; // Kiểm tra nếu level không tồn tại
     },
     classLevel() {
-      return this.mapLevel[this.task.level].class;
+      const level = this.mapLevel[this.task.level];
+      return level ? level.class : ""; // Kiểm tra nếu level không tồn tại
+    },
+  },
+
+  methods: {
+    handleDelete() {
+      this.$emit("handleDelete", this.task);
     },
   },
   data() {

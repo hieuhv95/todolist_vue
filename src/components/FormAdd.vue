@@ -33,7 +33,7 @@ export default {
   methods: {
     onClickAddTask() {
       // console.log("Clicked add task button");
-      this.$emit("handleAddTask");
+      this.$emit("handleToggleForm");
     },
   },
 };

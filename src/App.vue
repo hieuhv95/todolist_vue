@@ -2,10 +2,23 @@
   <div id="app">
     <b-container>
       <comp-title />
-      <comp-control :strSearch="strSearch" @handleSearch="handleSearch" />
-      <comp-form v-bind:isShowForm="isShowForm" v-on:toggleForm="toggleForm" />
+      <comp-control
+        :orderBy="orderBy"
+        :orderDir="orderDir"
+        :strSearch="strSearch"
+        @handleSearch="handleSearch"
+        @handleSort="handleSoft"
+      />
+      <comp-form
+        @handleAddTask="handleAddTask"
+        :isShowForm="isShowForm"
+        @toggleForm="toggleForm"
+      />
 
-      <todo-list-table v-bind:listTask="listTaskSearch" />
+      <todo-list-table
+        :listTask="listTaskFiltered"
+        @handleDeleteTask="handleDeleteTask"
+      />
     </b-container>
   </div>
 </template>
@@ -24,25 +37,49 @@ export default {
       listTask: listTask,
       isShowForm: false,
       strSearch: "",
+      orderBy: "name",
+      orderDir: "asc",
     };
   },
   computed: {
-    listTaskSearch() {
-      const { strSearch } = this;
-      var newItems = this.listTask.filter((item) => {
-        return item.name.toLowerCase().includes(strSearch.toLowerCase());
-      });
-
-      console.log("Filtered newItems =", newItems);
-      return newItems;
+    listTaskFiltered() {
+      return this.listTask
+        .filter((item) =>
+          item.name.toLowerCase().includes(this.strSearch.toLowerCase())
+        )
+        .sort(this.compareSort);
     },
   },
   methods: {
+    compareSort(a, b) {
+      let numberSort = this.orderDir === "asc" ? 1 : -1; // Sắp xếp asc/desc
+      if (a[this.orderBy] < b[this.orderBy]) return -1 * numberSort;
+      if (a[this.orderBy] > b[this.orderBy]) return 1 * numberSort;
+      return 0;
+    },
     handleSearch(data) {
       this.strSearch = data;
     },
     toggleForm() {
       this.isShowForm = !this.isShowForm;
+    },
+    handleSoft(data) {
+      // console.log("Data received from comp-control:", data);
+      this.orderBy = data.orderBy;
+      this.orderDir = data.orderDir;
+    },
+    handleDeleteTask(taskDelete) {
+      if (
+        confirm(`Bạn có chắc chắn muốn xóa task "${taskDelete.name}" không?`)
+      ) {
+        this.listTask = this.listTask.filter(
+          (task) => task.id !== taskDelete.id
+        );
+      }
+    },
+    handleAddTask(task) {
+      this.listTask.push(task);
+      this.isShowForm = false;
     },
   },
 };

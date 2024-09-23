@@ -2,7 +2,11 @@
   <div class="mb-4">
     <b-row>
       <b-col>
-        <control-sort />
+        <control-sort
+          @handleSort="handleSort"
+          :orderBy="orderBy"
+          :orderDir="orderDir"
+        />
       </b-col>
       <b-col>
         <control-search @handleSearch="handleSearch" :strSearch="strSearch" />
@@ -19,6 +23,8 @@ export default {
   name: "comp-control",
   props: {
     strSearch: { type: String, default: "" },
+    orderBy: { type: String, default: "name" },
+    orderDir: { type: String, default: "asc" },
   },
   data() {
     return {};
@@ -26,6 +32,10 @@ export default {
   methods: {
     handleSearch(data) {
       this.$emit("handleSearch", data);
+    },
+    handleSort(data) {
+      // console.log("Data received from child:", data);
+      this.$emit("handleSort", data);
     },
   },
 };

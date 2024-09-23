@@ -16,7 +16,7 @@
         >Level DESC</b-dropdown-item
       >
     </b-dropdown>
-    <span class="btn btn-success">NAME - DESC</span>
+    <span class="order btn btn-success ">{{ orderBy }} - {{ orderDir }}</span>
   </div>
 </template>
 
@@ -26,9 +26,15 @@ export default {
   data() {
     return {};
   },
+  props: {
+    orderBy: { type: String, default: "name" },
+    orderDir: { type: String, default: "asc" },
+  },
   methods: {
     handleSoft(orderBy, orderDir) {
-      console.log(111);
+      let data = { orderBy, orderDir };
+      // console.log("Emitting handleSort with data:", data);
+      this.$emit("handleSort", data);
     },
   },
 };
@@ -37,5 +43,8 @@ export default {
 <style scoped>
 .me-3 {
   margin-right: 1rem;
+}
+.order {
+  text-transform: uppercase;
 }
 </style>
